@@ -73,12 +73,12 @@ function IndividualTask() {
               </div>
             </div>
 
-            <button
+            {/* <button
               onClick={gotoedittask}
               className="py-3 mt-4 btn btn-lg btn-success btn-block"
             >
               Edit
-            </button>
+            </button> */}
           </form>
         </div>
       </div>

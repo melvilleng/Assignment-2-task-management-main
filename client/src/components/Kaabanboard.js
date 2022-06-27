@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Link, useParams,useNavigate} from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { ExampleContext } from "../ExampleContext.js";
 import axios from "axios";
 import moment from "moment";
@@ -12,17 +12,17 @@ function Kaabanboard() {
   const [showtask, setShowtask] = useState([]);
   const [boardupdate, setBoardupdate] = useState(0);
   const { usernamestore } = useContext(ExampleContext);
-  const [checkonepermit,setCheckpermit]= useState("");
-  const navigate= useNavigate();
+  const [checkonepermit, setCheckpermit] = useState("");
+  const navigate = useNavigate();
 
-  const checkpermit=()=>{
-    axios.post("/checkpermit",{username:usernamestore,appname:acronym_name}).then((response)=>{
-      setCheckpermit(response.data)
-      console.log(response.data)
-    })
-  }
-
-
+  const checkpermit = () => {
+    axios
+      .post("/checkpermit", { username: usernamestore, appname: acronym_name })
+      .then((response) => {
+        setCheckpermit(response.data);
+        console.log(response.data);
+      });
+  };
 
   const showallplan = async () => {
     await axios.get(`/showplan/${acronym_name}`).then((response) => {
@@ -73,10 +73,9 @@ function Kaabanboard() {
       });
   };
 
-  const createtaskbtn=()=>{
-    navigate(`/create-task/${app_acronym.appname}`)
-  }
-
+  const createtaskbtn = () => {
+    navigate(`/create-task/${app_acronym.appname}`);
+  };
 
   useEffect(() => {
     showallplan();
@@ -91,9 +90,13 @@ function Kaabanboard() {
           <div className="card">
             <div className="card-header">
               <div className="card-actions float-right">
-                <Link to={`/create-plan/${app_acronym.appname}`}>
-                  <button>Create Plan</button>
-                </Link>
+                {checkonepermit.editplanright ? (
+                  <Link to={`/create-plan/${app_acronym.appname}`}>
+                    <button>Create Plan</button>
+                  </Link>
+                ) : (
+                  ""
+                )}
               </div>
               <h1 className="card-title">Plan</h1>
             </div>
@@ -114,9 +117,13 @@ function Kaabanboard() {
                           End Date:{" "}
                           {moment(indv_plan.Plan_endDate).format("DD-MM-YYYY")}
                         </p>
-                        <Link to={`/editplan/${indv_plan.Plan_MVP_name}`}>
-                        <button>Edit</button>
-                        </Link>
+                        {checkonepermit.editplanright ? (
+                          <Link to={`/editplan/${indv_plan.Plan_MVP_name}`}>
+                            <button>Edit</button>
+                          </Link>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </div>
                   </div>
@@ -127,15 +134,16 @@ function Kaabanboard() {
         </div>
       </div>
       <div className="testcontainer">
-        
-         
-        
-        {checkonepermit.permit_create ?<button onClick={createtaskbtn} className="float-right">Create Task</button>:""}
-         
-        
-       
+        {checkonepermit.permit_create ? (
+          <button onClick={createtaskbtn} className="float-right">
+            Create Task
+          </button>
+        ) : (
+          ""
+        )}
+
         {console.log(checkonepermit.permit_create)}
-        
+
         <div className="rightcontainer p-0">
           <h1 className="h3 mb-3">Kanban Board</h1>
           <div className="row">
@@ -167,13 +175,14 @@ function Kaabanboard() {
                                 view
                               </button>
                             </Link>
-                            {console.log(checkonepermit.permit_open)
-                            // checkonepermit.permit_open ?<Link to={`/edittask/${eachtask.Task_id}`}>
-                            //   <button className="btn btn-primary btn-block">
-                            //     Edit
-                            //   </button>
-                            // </Link>:""}
-                    }
+                            {checkonepermit.permit_open ? (
+                              <Link to={`/edittask/${eachtask.Task_id}`}>
+                                <button>Edit</button>
+                              </Link>
+                            ) : (
+                              ""
+                            )}
+
                             <button
                               onClick={() =>
                                 promote_task(
@@ -223,17 +232,21 @@ function Kaabanboard() {
                               view
                             </button>
                           </Link>
-                          <button
-                            onClick={() =>
-                              promote_task(
-                                eachtask.Task_id,
-                                eachtask.Task_state,
-                                eachtask.Task_notes
-                              )
-                            }
-                          >
-                            Move Right
-                          </button>
+                          {checkonepermit.permit_toDo ? (
+                            <button
+                              onClick={() =>
+                                promote_task(
+                                  eachtask.Task_id,
+                                  eachtask.Task_state,
+                                  eachtask.Task_notes
+                                )
+                              }
+                            >
+                              Move Right
+                            </button>
+                          ) : (
+                            ""
+                          )}
                         </div>
                       );
                     } else {
@@ -265,32 +278,40 @@ function Kaabanboard() {
                               <p>{eachtask.Task_name}</p>
                             </div>
                           </div>
-                          <button
-                            onClick={() =>
-                              demote_task(
-                                eachtask.Task_id,
-                                eachtask.Task_state,
-                                eachtask.Task_notes
-                              )
-                            }
-                          >
-                            Move Left
-                          </button>
+                          {checkonepermit.permit_doing ? (
+                            <div>
+                              <button
+                                onClick={() =>
+                                  demote_task(
+                                    eachtask.Task_id,
+                                    eachtask.Task_state,
+                                    eachtask.Task_notes
+                                  )
+                                }
+                              >
+                                Move Left
+                              </button>
 
-                          <button className="btn btn-primary btn-block">
-                            View
-                          </button>
-                          <button
-                            onClick={() =>
-                              promote_task(
-                                eachtask.Task_id,
-                                eachtask.Task_state,
-                                eachtask.Task_notes
-                              )
-                            }
-                          >
-                            Move Right
-                          </button>
+                              <button className="btn btn-primary btn-block">
+                                View
+                              </button>
+                              <button
+                                onClick={() =>
+                                  promote_task(
+                                    eachtask.Task_id,
+                                    eachtask.Task_state,
+                                    eachtask.Task_notes
+                                  )
+                                }
+                              >
+                                Move Right
+                              </button>
+                            </div>
+                          ) : (
+                            <button className="btn btn-primary btn-block">
+                              View
+                            </button>
+                          )}
                         </div>
                       );
                     } else {
@@ -322,32 +343,40 @@ function Kaabanboard() {
                               <p>{eachtask.Task_name}</p>
                             </div>
                           </div>
-                          <button
-                            onClick={() =>
-                              demote_task(
-                                eachtask.Task_id,
-                                eachtask.Task_state,
-                                eachtask.Task_notes
-                              )
-                            }
-                          >
-                            Move Left
-                          </button>
+                          {checkonepermit.permit_done ? (
+                            <div>
+                              <button
+                                onClick={() =>
+                                  demote_task(
+                                    eachtask.Task_id,
+                                    eachtask.Task_state,
+                                    eachtask.Task_notes
+                                  )
+                                }
+                              >
+                                Move Left
+                              </button>
 
-                          <button className="btn btn-primary btn-block">
-                            View
-                          </button>
-                          <button
-                            onClick={() =>
-                              promote_task(
-                                eachtask.Task_id,
-                                eachtask.Task_state,
-                                eachtask.Task_notes
-                              )
-                            }
-                          >
-                            Move Right
-                          </button>
+                              <button className="btn btn-primary btn-block">
+                                View
+                              </button>
+                              <button
+                                onClick={() =>
+                                  promote_task(
+                                    eachtask.Task_id,
+                                    eachtask.Task_state,
+                                    eachtask.Task_notes
+                                  )
+                                }
+                              >
+                                Move Right
+                              </button>
+                            </div>
+                          ) : (
+                            <button className="btn btn-primary btn-block">
+                              View
+                            </button>
+                          )}
                         </div>
                       );
                     } else {

@@ -14,6 +14,7 @@ function EditIndividualTask() {
   const navigate = useNavigate();
   const newtaskid = taskid.split("_");
   const [gettaskstate, setTaskstate] = useState("");
+  const [edittaskright, setedittaskright] = useState("");
 
   const showindividualtask = async () => {
     await axios.get(`/showsingletask/${taskid}`).then((response) => {
@@ -59,13 +60,26 @@ function EditIndividualTask() {
       });
   };
 
+  const edittask_right = () => {
+    axios
+      .post("/edittaskright", {
+        taskid: taskid,
+        task_state: gettaskstate,
+        username: usernamestore,
+      })
+      .then((response) => {
+        setedittaskright(response.data);
+      });
+  };
+
   const goback = () => {
-    navigate(`/application/${gettask_plan.Plan_app_Acronym}`);
+    navigate(`/application/${singletask.Task_app_Acronym}`);
   };
 
   useEffect(() => {
     showindividualtask(); //eslint-disable-next-line
     showtaskplan(); //eslint-disable-next-line
+    edittask_right(); //eslint-disable-next-line
   }, []);
 
   return (
@@ -107,31 +121,39 @@ function EditIndividualTask() {
               <label htmlFor="username-register" className="text-muted mb-1">
                 <small>Plan</small>
               </label>
-              <select
-                onChange={(event) => {
-                  setTaskplan(event.target.value);
-                }}
-                className="form-control"
-                defaultValue={" "}
-              >
-                <option value=" " disabled>
-                  Select your Plan
-                </option>
-                {gettask_plan.map((listtask, keytask) => {
-                  return (
-                    <option key={keytask}>{listtask.Plan_MVP_name}</option>
-                  );
-                })}
-              </select>
             </div>
-            <button
-              onClick={() => {
-                edittaskplan(singletask.Task_notes, singletask.Task_plan);
-              }}
-              className="py-3 mt-4 btn btn-lg btn-success btn-block"
-            >
-              Update Plan
-            </button>
+            {edittaskright ? (
+              <div>
+                <select
+                  onChange={(event) => {
+                    setTaskplan(event.target.value);
+                  }}
+                  className="form-control"
+                  defaultValue={" "}
+                >
+                  <option value=" " disabled>
+                    Select your Plan
+                  </option>
+                  {gettask_plan.map((listtask, keytask) => {
+                    return (
+                      <option key={keytask}>{listtask.Plan_MVP_name}</option>
+                    );
+                  })}
+                </select>
+                <button
+                  onClick={() => {
+                    edittaskplan(singletask.Task_notes, singletask.Task_plan);
+                  }}
+                  className="py-3 mt-4 btn btn-lg btn-success btn-block"
+                >
+                  Update Plan
+                </button>
+              </div>
+            ) : (
+              <div>
+                <h3>{singletask.Task_plan}</h3>
+              </div>
+            )}
 
             <div className="form-group">
               <label htmlFor="username-register" className="text-muted mb-1">

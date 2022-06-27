@@ -365,133 +365,75 @@ app.post("/checkgroup", function (req, res) {
   );
 });
 
-//check permit
+//permit check
 app.post("/checkpermit", function (req, res) {
   const username = req.body.username;
   const appname = req.body.appname;
   db.query(
-    "SELECT usergroup FROM accounts WHERE username=?",
-    [username],
+    "SELECT * FROM application WHERE App_Acronym=?",
+    [appname],
     (err, result) => {
       if (err) {
         console.log(err);
       } else {
-        console.log(result[0].usergroup);
-        let usergroup = result[0].usergroup.split(",");
-
+        console.log(result[0].App_permit_toDoList);
+        let create = result[0].App_permit_Create;
+        let open = result[0].App_permit_Open;
+        let toDo = result[0].App_permit_toDoList;
+        let doing = result[0].App_permit_Doing;
+        let done = result[0].App_permit_Done;
         db.query(
-          "SELECT App_permit_Create FROM application WHERE App_Acronym=?",
-          [appname],
-          (err, permit) => {
-            if (
-              usergroup.filter(
-                (create) => create === permit[0].App_permit_Create
-              ) &&
-              permit[0].App_permit_Create !== ""
-            ) {
-              console.log(
-                usergroup.filter(
-                  (create) => create === permit[0].App_permit_Create
-                )
-              );
-              res.send({
-                permit_create: true,
-                permit_open: false,
-                permit_todo: false,
-                permit_doing: false,
-                permit_done: false,
-              });
+          "SELECT usergroup FROM accounts WHERE username=?",
+          [username],
+          (err, result) => {
+            if (err) {
+              console.log(err);
             } else {
-              db.query(
-                "SELECT App_permit_Open FROM application WHERE App_Acronym=?",
-                [appname],
-                (err, permit) => {
-                  if (
-                    usergroup.filter(
-                      (open) => open === permit[0].App_permit_Open
-                    ) &&
-                    permit[0].App_permit_Create !== ""
-                  ) {
-                    res.send({
-                      permit_create: false,
-                      permit_open: true,
-                      permit_todo: false,
-                      permit_doing: false,
-                      permit_done: false,
-                    });
-                    console.log("test");
-                  } else {
-                    db.query(
-                      "SELECT App_permit_toDoList FROM application WHERE App_Acronym=?",
-                      [appname],
-                      (err, permit) => {
-                        if (
-                          usergroup.includes(permit[0].App_permit_toDoList) &&
-                          permit[0].App_permit_Create !== ""
-                        ) {
-                          res.send({
-                            permit_create: false,
-                            permit_open: false,
-                            permit_todo: true,
-                            permit_doing: false,
-                            permit_done: false,
-                          });
-                        } else {
-                          db.query(
-                            "SELECT App_permit_Doing FROM application WHERE App_Acronym=?",
-                            [appname],
-                            (err, permit) => {
-                              if (
-                                usergroup.includes(
-                                  permit[0].App_permit_Doing
-                                ) &&
-                                permit[0].App_permit_Create !== ""
-                              ) {
-                                res.send({
-                                  permit_create: false,
-                                  permit_open: false,
-                                  permit_todo: false,
-                                  permit_doing: true,
-                                  permit_done: false,
-                                });
-                              } else {
-                                db.query(
-                                  "SELECT App_permit_Done FROM application WHERE App_Acronym=?",
-                                  [appname],
-                                  (err, permit) => {
-                                    if (
-                                      usergroup.includes(
-                                        permit[0].App_permit_Done
-                                      ) &&
-                                      permit[0].App_permit_Create !== ""
-                                    ) {
-                                      res.send({
-                                        permit_create: false,
-                                        permit_open: false,
-                                        permit_todo: false,
-                                        permit_doing: false,
-                                        permit_done: true,
-                                      });
-                                    } else {
-                                      res.send({
-                                        permit_create: false,
-                                        permit_open: false,
-                                        permit_todo: false,
-                                        permit_doing: false,
-                                        permit_done: false,
-                                      });
-                                    }
-                                  }
-                                );
-                              }
-                            }
-                          );
-                        }
-                      }
-                    );
-                  }
-                }
-              );
+              let listusergroup = result[0].usergroup.split(",");
+              console.log(listusergroup.includes(toDo));
+              res.send({
+                permit_create: listusergroup.includes(create),
+                permit_open: listusergroup.includes(open),
+                permit_toDo: listusergroup.includes(toDo),
+                permit_doing: listusergroup.includes(doing),
+                permit_done: listusergroup.includes(done),
+                editplanright: listusergroup.includes("Project Manager"),
+              });
+            }
+          }
+        );
+      }
+    }
+  );
+});
+
+//edit task rights
+app.post("/edittaskright", function (req, res) {
+  const task_state = req.body.task_state;
+  const taskid = req.body.taskid;
+  const username = req.body.username;
+  db.query(
+    "SELECT task_state FROM task WHERE Task_id=?",
+    [taskid],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        let state = result[0].task_state;
+        db.query(
+          "SELECT usergroup FROM accounts WHERE username=?",
+          [username],
+          (err, result) => {
+            if (err) {
+              console.log(err);
+            } else {
+              if (
+                result[0].usergroup === "Project Manager" &&
+                state === "Open"
+              ) {
+                res.send({ PM: true });
+                console.log("test");
+              }
             }
           }
         );
