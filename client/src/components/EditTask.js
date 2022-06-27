@@ -15,6 +15,7 @@ function EditIndividualTask() {
   const newtaskid = taskid.split("_");
   const [gettaskstate, setTaskstate] = useState("");
   const [edittaskright, setedittaskright] = useState("");
+  const [additionnotes, setAdditionnotes] = useState("");
 
   const showindividualtask = async () => {
     await axios.get(`/showsingletask/${taskid}`).then((response) => {
@@ -49,6 +50,21 @@ function EditIndividualTask() {
     await axios
       .post("/edittask", {
         task_plan: task_plan,
+        taskid: taskid,
+        task_owner: usernamestore,
+        task_state: gettaskstate,
+        task_notes: task_notes,
+        existingplan: existingplan,
+      })
+      .then((response) => {
+        console.log(response);
+      });
+  };
+
+  const editaddtasknotes = async (task_notes, existingplan) => {
+    await axios
+      .post("/edittask", {
+        newnotes: additionnotes,
         taskid: taskid,
         task_owner: usernamestore,
         task_state: gettaskstate,
@@ -122,7 +138,7 @@ function EditIndividualTask() {
                 <small>Plan</small>
               </label>
             </div>
-            {edittaskright ? (
+            {edittaskright.PM || edittaskright.PL ? (
               <div>
                 <select
                   onChange={(event) => {
@@ -159,6 +175,24 @@ function EditIndividualTask() {
               <label htmlFor="username-register" className="text-muted mb-1">
                 <small>Notes</small>
               </label>
+              <textarea
+                id="email-change"
+                className="form-control"
+                type="text"
+                placeholder="Add Notes"
+                onChange={(event) => {
+                  setAdditionnotes(event.target.value);
+                }}
+              ></textarea>
+              <button
+                onClick={() => {
+                  editaddtasknotes(singletask.Task_notes, singletask.Task_plan);
+                }}
+                className="py-3 mt-2 mb-2 btn btn-lg btn-success btn-block"
+              >
+                Update Notes
+              </button>
+
               <div className="note-box">
                 <pre>{listtask_notes}</pre>
               </div>

@@ -28,6 +28,7 @@ import IndividualTask from "./components/IndividualTask";
 import EditIndividualTask from "./components/EditTask";
 import EditApplication from "./components/EditApplication";
 import EditPlan from "./components/EditPlan";
+import Email from "./components/Email";
 
 Axios.defaults.baseURL = "http://localhost:3001";
 
@@ -77,6 +78,7 @@ function Main() {
             <Route path="/task/:taskid" element={<IndividualTask />} />
             <Route path="/edittask/:taskid" element={<EditIndividualTask />} />
             <Route path="/editplan/:planname" element={<EditPlan />} />
+            <Route path="/email" element={<Email />} />
           </Routes>
         </div>
       </BrowserRouter>

@@ -1,6 +1,8 @@
 const express = require("express");
 const mysql = require("mysql");
 const cors = require("cors");
+const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
@@ -398,6 +400,7 @@ app.post("/checkpermit", function (req, res) {
                 permit_doing: listusergroup.includes(doing),
                 permit_done: listusergroup.includes(done),
                 editplanright: listusergroup.includes("Project Manager"),
+                placcesscontrol: listusergroup.includes("Project Lead"),
               });
             }
           }
@@ -433,6 +436,11 @@ app.post("/edittaskright", function (req, res) {
               ) {
                 res.send({ PM: true });
                 console.log("test");
+              } else if (
+                result[0].usergroup === "Project Lead" &&
+                state === "Done"
+              ) {
+                res.send({ PL: true });
               }
             }
           }
@@ -488,6 +496,21 @@ app.get("/showallapplication", function (req, res) {
       res.send(result);
     }
   });
+});
+
+app.post("/createaccessapplication", function (req, res) {
+  const username = req.body.username;
+  db.query(
+    "SELECT usergroup FROM accounts WHERE username=?",
+    [username],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        res.send(result);
+      }
+    }
+  );
 });
 
 //show one application
@@ -805,6 +828,7 @@ app.post("/edittask", function (req, res) {
   const task_notes = req.body.task_notes;
   const existingdes = req.body.existingdes;
   const existingplan = req.body.existingplan;
+  const newnotes = req.body.newnotes;
 
   let Plantimestamp =
     "Plan Updated" +
@@ -920,6 +944,38 @@ app.post("/edittask", function (req, res) {
         }
       }
     );
+  } else if (newnotes) {
+    db.query(
+      "UPDATE task SET Task_notes=?,Task_owner=? WHERE Task_id=?",
+      [newnotes, task_owner, taskid],
+      (err, result) => {
+        if (err) {
+          console.log(err);
+        } else {
+          let new_note =
+            newnotes +
+            "\n\r" +
+            "Userid: " +
+            task_owner +
+            " Current State: " +
+            taskstate +
+            " Datetime " +
+            datetime;
+          let timestamp = new_note + "/n" + task_notes;
+          db.query(
+            "UPDATE task SET Task_notes=? WHERE Task_id=?",
+            [timestamp, taskid],
+            (err, result) => {
+              if (err) {
+                console.log(err);
+              } else {
+                console.log("plan");
+              }
+            }
+          );
+        }
+      }
+    );
   }
 });
 
@@ -1008,6 +1064,60 @@ app.post("/demote_task", function (req, res) {
       }
     }
   );
+});
+
+app.get("/getallthepl", function (req, res) {
+  db.query(
+    "SELECT * FROM accounts WHERE usergroup=?",
+    ["Project Lead"],
+    (err, result) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log(result);
+      }
+    }
+  );
+});
+
+let transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    type: "OAUTH2",
+    user: process.env.EMAIL,
+    pass: process.env.WORD,
+    clientId: process.env.OAUTH_CLIENTID,
+    clientSecret: process.env.OAUTH_CLIENT_SECRET,
+    refreshToken: process.env.OAUTH_REFRESH_TOKEN,
+  },
+});
+
+transporter.verify((err, success) => {
+  err
+    ? console.log(err)
+    : console.log(`=== Server is ready to take messages: ${success} ===`);
+});
+
+app.post("/send", function (req, res) {
+  let mailOptions = {
+    from: "iverynd1992@gmail.com",
+    to: `${req.body.mailerState.email}`,
+    subject: `Message from: ${req.body.mailerState.email}`,
+    text: `${req.body.mailerState.message}`,
+  };
+
+  transporter.sendMail(mailOptions, function (err, data) {
+    if (err) {
+      res.json({
+        status: "fail",
+      });
+    } else {
+      console.log("== Message Sent ==");
+      res.json({
+        status: "success",
+      });
+    }
+  });
 });
 
 app.listen(3001, () => {

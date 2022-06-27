@@ -1,11 +1,14 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import moment from "moment";
+import { ExampleContext } from "../ExampleContext.js";
 
 function Application() {
+  const { usernamestore } = useContext(ExampleContext);
   const navigate = useNavigate();
   const [showallapp, setShowallapp] = useState([]);
+  const [showoneapp, setShowoneapp] = useState([]);
 
   const createapplication = () => {
     navigate("/create-application");
@@ -17,15 +20,29 @@ function Application() {
     });
   };
 
+  const showoneapplication = async () => {
+    await axios
+      .post("/createaccessapplication", { username: usernamestore })
+      .then((response) => {
+        console.log(response.data[0].usergroup);
+        setShowoneapp(response.data[0].usergroup);
+      });
+  };
+
   useEffect(() => {
     showallapplication();
+    showoneapplication();
   }, []);
 
   return (
     <div className="application-container">
-      <div id="create-application-button">
-        <button onClick={createapplication}>Create Application</button>
-      </div>
+      {showoneapp === "Project Lead" ? (
+        <div id="create-application-button">
+          <button onClick={createapplication}>Create Application</button>
+        </div>
+      ) : (
+        ""
+      )}
       <div className="main-div">
         <h2>List of Application</h2>
       </div>

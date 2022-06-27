@@ -19,11 +19,8 @@ function IndividualTask() {
     });
   };
 
-  const gotoedittask = () => {
-    navigate(`/edittask/${taskid}`);
-  };
   const goback = () => {
-    navigate(-1);
+    navigate(`/application/${singletask.Task_app_Acronym}`);
   };
 
   useEffect(() => {

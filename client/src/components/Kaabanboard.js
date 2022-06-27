@@ -14,6 +14,11 @@ function Kaabanboard() {
   const { usernamestore } = useContext(ExampleContext);
   const [checkonepermit, setCheckpermit] = useState("");
   const navigate = useNavigate();
+  const [mailerState, setMailerState] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
 
   const checkpermit = () => {
     axios
@@ -73,6 +78,33 @@ function Kaabanboard() {
       });
   };
 
+  const submitEmail = async (e) => {
+    e.preventDefault();
+    console.log({ mailerState });
+    await axios
+      .post("http://localhost:3001/send", {
+        // name: username,
+        // email: email,
+        message: "Task Done",
+      })
+      .then((res) => res.json())
+      .then(async (res) => {
+        const resData = await res;
+        console.log(resData);
+        if (resData.status === "success") {
+          alert("Message Sent");
+        } else if (resData.status === "fail") {
+          alert("Message failed to send");
+        }
+      });
+  };
+
+  const checkemailaccount = async () => {
+    await axios.get("/getallthepl").then((response) => {
+      console.log(response);
+    });
+  };
+
   const createtaskbtn = () => {
     navigate(`/create-task/${app_acronym.appname}`);
   };
@@ -81,6 +113,7 @@ function Kaabanboard() {
     showallplan();
     showalltask(); // eslint-disable-next-line
     checkpermit();
+    checkemailaccount();
   }, [boardupdate]);
 
   return (
@@ -175,7 +208,8 @@ function Kaabanboard() {
                                 view
                               </button>
                             </Link>
-                            {checkonepermit.permit_open ? (
+                            {checkonepermit.permit_open ||
+                            checkonepermit.placcesscontrol ? (
                               <Link to={`/edittask/${eachtask.Task_id}`}>
                                 <button>Edit</button>
                               </Link>
@@ -292,9 +326,11 @@ function Kaabanboard() {
                                 Move Left
                               </button>
 
-                              <button className="btn btn-primary btn-block">
-                                View
-                              </button>
+                              <Link to={`/task/${eachtask.Task_id}`}>
+                                <button className="btn btn-primary btn-block">
+                                  view
+                                </button>
+                              </Link>
                               <button
                                 onClick={() =>
                                   promote_task(
@@ -308,9 +344,11 @@ function Kaabanboard() {
                               </button>
                             </div>
                           ) : (
-                            <button className="btn btn-primary btn-block">
-                              View
-                            </button>
+                            <Link to={`/task/${eachtask.Task_id}`}>
+                              <button className="btn btn-primary btn-block">
+                                view
+                              </button>
+                            </Link>
                           )}
                         </div>
                       );
@@ -357,9 +395,11 @@ function Kaabanboard() {
                                 Move Left
                               </button>
 
-                              <button className="btn btn-primary btn-block">
-                                View
-                              </button>
+                              <Link to={`/task/${eachtask.Task_id}`}>
+                                <button className="btn btn-primary btn-block">
+                                  view
+                                </button>
+                              </Link>
                               <button
                                 onClick={() =>
                                   promote_task(
