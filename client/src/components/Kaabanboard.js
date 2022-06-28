@@ -14,11 +14,7 @@ function Kaabanboard() {
   const { usernamestore } = useContext(ExampleContext);
   const [checkonepermit, setCheckpermit] = useState("");
   const navigate = useNavigate();
-  const [mailerState, setMailerState] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const [getemail, setGetemail] = useState("");
 
   const checkpermit = () => {
     axios
@@ -79,17 +75,14 @@ function Kaabanboard() {
   };
 
   const submitEmail = async (e) => {
-    e.preventDefault();
-    console.log({ mailerState });
+    const listemail = getemail;
     await axios
       .post("http://localhost:3001/send", {
-        // name: username,
-        // email: email,
-        message: "Task Done",
+        name: usernamestore,
+        email: listemail,
       })
-      .then((res) => res.json())
-      .then(async (res) => {
-        const resData = await res;
+
+      .then((resData) => {
         console.log(resData);
         if (resData.status === "success") {
           alert("Message Sent");
@@ -101,7 +94,8 @@ function Kaabanboard() {
 
   const checkemailaccount = async () => {
     await axios.get("/getallthepl").then((response) => {
-      console.log(response);
+      setGetemail(response.data);
+      console.log(response.data);
     });
   };
 
@@ -174,8 +168,6 @@ function Kaabanboard() {
         ) : (
           ""
         )}
-
-        {console.log(checkonepermit.permit_create)}
 
         <div className="rightcontainer p-0">
           <h1 className="h3 mb-3">Kanban Board</h1>
@@ -332,13 +324,14 @@ function Kaabanboard() {
                                 </button>
                               </Link>
                               <button
-                                onClick={() =>
+                                onClick={() => {
                                   promote_task(
                                     eachtask.Task_id,
                                     eachtask.Task_state,
                                     eachtask.Task_notes
-                                  )
-                                }
+                                  );
+                                  submitEmail();
+                                }}
                               >
                                 Move Right
                               </button>

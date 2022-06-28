@@ -65,9 +65,13 @@ function Application() {
                   <h4>
                     {moment(eachappinfo.App_endDate).format("DD-MM-YYYY")}
                   </h4>
-                  <Link to={`/edit-application/${eachappinfo.App_Acronym}`}>
-                    <button>Edit Application</button>
-                  </Link>
+                  {showoneapp === "Project Lead" ? (
+                    <Link to={`/edit-application/${eachappinfo.App_Acronym}`}>
+                      <button>Edit Application</button>
+                    </Link>
+                  ) : (
+                    " "
+                  )}
                   <Link to={`/application/${eachappinfo.App_Acronym}`}>
                     <button>Go to Application</button>
                   </Link>

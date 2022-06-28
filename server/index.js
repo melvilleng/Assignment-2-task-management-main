@@ -1067,17 +1067,21 @@ app.post("/demote_task", function (req, res) {
 });
 
 app.get("/getallthepl", function (req, res) {
-  db.query(
-    "SELECT * FROM accounts WHERE usergroup=?",
-    ["Project Lead"],
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      } else {
-        console.log(result);
-      }
+  db.query("SELECT * FROM accounts", (err, result) => {
+    if (err) {
+      console.log(err);
+    } else {
+      let listofplemail = [];
+      result.forEach((ug) => {
+        if (ug.usergroup === null) {
+          console.log("hi");
+        } else if (ug.usergroup.includes("Project Lead")) {
+          listofplemail.push(ug.email);
+        }
+      });
+      res.send(listofplemail.toString());
     }
-  );
+  });
 });
 
 let transporter = nodemailer.createTransport({
@@ -1101,9 +1105,9 @@ transporter.verify((err, success) => {
 app.post("/send", function (req, res) {
   let mailOptions = {
     from: "iverynd1992@gmail.com",
-    to: `${req.body.mailerState.email}`,
-    subject: `Message from: ${req.body.mailerState.email}`,
-    text: `${req.body.mailerState.message}`,
+    to: `${req.body.email}`,
+    subject: `Message from: ${req.body.name}`,
+    text: "Task has been move from Doing to Done",
   };
 
   transporter.sendMail(mailOptions, function (err, data) {
