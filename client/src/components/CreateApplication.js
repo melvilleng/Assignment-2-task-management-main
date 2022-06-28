@@ -12,7 +12,7 @@ function CreateApplication() {
   const [description, setDescription] = useState("");
   const [startdate, setStartdate] = useState(date);
   const [enddate, setEnddate] = useState(date);
-  const [usergroup,setshowUsergroup]=useState([])
+  const [usergroup, setshowUsergroup] = useState([]);
   const [permit_open, setpermit_open] = useState("");
   const [permit_create, setpermit_create] = useState("");
   const [permit_todolist, setpermit_todolist] = useState("");
@@ -30,9 +30,9 @@ function CreateApplication() {
         app_end_date: enddate,
         app_open: permit_open,
         app_create: permit_create,
-        app_todo:permit_todolist,
-        app_doing:permit_Doing,
-        app_done:permit_Done
+        app_todo: permit_todolist,
+        app_doing: permit_Doing,
+        app_done: permit_Done,
       })
       .then(() => {
         console.log("success");
@@ -52,13 +52,13 @@ function CreateApplication() {
     );
   };
 
-  const backtoapplication=()=>{
-    navigate("/application")
-  }
+  const backtoapplication = () => {
+    navigate("/application");
+  };
 
-  useEffect(()=>{
+  useEffect(() => {
     listUsergroup(); //eslint-disable-next-line
-  },[])
+  }, []);
 
   return (
     <div>
@@ -77,6 +77,7 @@ function CreateApplication() {
                 onChange={(event) => {
                   setAcronym(event.target.value);
                 }}
+                required
               />
             </div>
 
@@ -92,6 +93,7 @@ function CreateApplication() {
                 onChange={(event) => {
                   setRnumber(event.target.value);
                 }}
+                required
               />
             </div>
 
@@ -141,116 +143,106 @@ function CreateApplication() {
                 }}
               />
             </div>
-                <div>
-                <label>
+            <div>
+              <label>
                 <h6>Permit Create:</h6>
               </label>
-            <select
-                      onChange={(event) => {
-                        setpermit_create(event.target.value);
-                      }}
-                      defaultValue={" "}
-                    >
-                      <option value=" ">
-                        Select your option
-                      </option>
-                      {usergroup.map((usergroupinfo, usergroup) => {
-                        return (
-                          <option key={usergroup}>
-                            {usergroupinfo.usergroup_name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    </div>
-                    <div>
-                    <label>
+              <select
+                onChange={(event) => {
+                  setpermit_create(event.target.value);
+                }}
+                defaultValue={" "}
+              >
+                <option value=" ">Select your option</option>
+                {usergroup.map((usergroupinfo, usergroup) => {
+                  return (
+                    <option key={usergroup}>
+                      {usergroupinfo.usergroup_name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            <div>
+              <label>
                 <h6>Permit Open:</h6>
               </label>
-            <select
-                      onChange={(event) => {
-                        setpermit_open(event.target.value);
-                      }}
-                      defaultValue={" "}
-                    >
-                      <option value=" ">
-                        Select your option
-                      </option>
-                      {usergroup.map((usergroupinfo, usergroup) => {
-                        return (
-                          <option key={usergroup}>
-                            {usergroupinfo.usergroup_name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    </div>
-                    <div>
-                    <label>
+              <select
+                onChange={(event) => {
+                  setpermit_open(event.target.value);
+                }}
+                defaultValue={" "}
+              >
+                <option value=" ">Select your option</option>
+                {usergroup.map((usergroupinfo, usergroup) => {
+                  return (
+                    <option key={usergroup}>
+                      {usergroupinfo.usergroup_name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            <div>
+              <label>
                 <h6>Permit to-do-list:</h6>
               </label>
-            <select
-                      onChange={(event) => {
-                        setpermit_todolist(event.target.value);
-                      }}
-                      defaultValue={" "}
-                    >
-                      <option value=" ">
-                        Select your option
-                      </option>
-                      {usergroup.map((usergroupinfo, usergroup) => {
-                        return (
-                          <option key={usergroup}>
-                            {usergroupinfo.usergroup_name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    </div>
-                    <div>
-                    <label>
+              <select
+                onChange={(event) => {
+                  setpermit_todolist(event.target.value);
+                }}
+                defaultValue={" "}
+              >
+                <option value=" ">Select your option</option>
+                {usergroup.map((usergroupinfo, usergroup) => {
+                  return (
+                    <option key={usergroup}>
+                      {usergroupinfo.usergroup_name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            <div>
+              <label>
                 <h6>Permit Doing:</h6>
               </label>
-            <select
-                      onChange={(event) => {
-                        setpermitDoing(event.target.value);
-                      }}
-                      defaultValue={" "}
-                    >
-                      <option value=" ">
-                        Select your option
-                      </option>
-                      {usergroup.map((usergroupinfo, usergroup) => {
-                        return (
-                          <option key={usergroup}>
-                            {usergroupinfo.usergroup_name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    </div>
-                    <div>
-                    <label>
+              <select
+                onChange={(event) => {
+                  setpermitDoing(event.target.value);
+                }}
+                defaultValue={" "}
+              >
+                <option value=" ">Select your option</option>
+                {usergroup.map((usergroupinfo, usergroup) => {
+                  return (
+                    <option key={usergroup}>
+                      {usergroupinfo.usergroup_name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
+            <div>
+              <label>
                 <h6>Permit Done:</h6>
               </label>
-            <select
-                      onChange={(event) => {
-                        setpermitDone(event.target.value);
-                      }}
-                      defaultValue={" "}
-                    >
-                      <option value=" ">
-                        Select your option
-                      </option>
-                      {usergroup.map((usergroupinfo, usergroup) => {
-                        return (
-                          <option key={usergroup}>
-                            {usergroupinfo.usergroup_name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    </div>
+              <select
+                onChange={(event) => {
+                  setpermitDone(event.target.value);
+                }}
+                defaultValue={" "}
+              >
+                <option value=" ">Select your option</option>
+                {usergroup.map((usergroupinfo, usergroup) => {
+                  return (
+                    <option key={usergroup}>
+                      {usergroupinfo.usergroup_name}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
 
             <button
               onClick={createNewApplication}

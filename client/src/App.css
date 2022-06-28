@@ -222,11 +222,19 @@ textarea.tall-textarea {
 }
 
 .memberDiv {
-  width: auto;
+  /* width: auto;
   height: auto;
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
+  flex: 0 0 33.333333%;
+}
+
+.controlboard {
+  width: 95%;
+  overflow-y: hidden;
+  overflow-x: scroll;
+  max-width: 1000px;
 }
 
 .button {
@@ -263,6 +271,11 @@ textarea.tall-textarea {
   min-height: 100vh;
   margin: -16px;
   background-color: #141414;
+}
+
+.application-body {
+  display: flex;
+  flex-wrap: wrap;
 }
 
 #my-cards {
