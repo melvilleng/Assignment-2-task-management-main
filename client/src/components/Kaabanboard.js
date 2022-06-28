@@ -179,8 +179,8 @@ function Kaabanboard() {
         <div className="rightcontainer p-0">
           <h1 className="h3 mb-3">Kanban Board</h1>
           <div className="controlboard">
-            <div className="row">
-              <div className="col">
+            <div className="rowwer">
+              <div className="coltest">
                 <div className="card card-border-primary">
                   <div className="card-header">
                     <div className="card-actions float-right"></div>
@@ -225,7 +225,7 @@ function Kaabanboard() {
                                     )
                                   }
                                 >
-                                  Move Right
+                                  Approve
                                 </button>
                               ) : (
                                 ""
@@ -285,7 +285,7 @@ function Kaabanboard() {
                                   )
                                 }
                               >
-                                Move Right
+                                Work on
                               </button>
                             ) : (
                               ""
@@ -332,7 +332,7 @@ function Kaabanboard() {
                                     )
                                   }
                                 >
-                                  Move Left
+                                  Return
                                 </button>
 
                                 <Link to={`/task/${eachtask.Task_id}`}>
@@ -353,7 +353,7 @@ function Kaabanboard() {
                                     submitEmail();
                                   }}
                                 >
-                                  Move Right
+                                  Promote
                                 </button>
                               </div>
                             ) : (
@@ -405,7 +405,7 @@ function Kaabanboard() {
                                     )
                                   }
                                 >
-                                  Move Left
+                                  Demote
                                 </button>
 
                                 <Link to={`/task/${eachtask.Task_id}`}>
@@ -425,13 +425,15 @@ function Kaabanboard() {
                                     )
                                   }
                                 >
-                                  Move Right
+                                  Confirm
                                 </button>
                               </div>
                             ) : (
-                              <button className="btn btn-primary btn-block">
-                                View
-                              </button>
+                              <Link to={`/task/${eachtask.Task_id}`}>
+                                <button className="btn btn-primary btn-block">
+                                  view
+                                </button>
+                              </Link>
                             )}
                           </div>
                         );
@@ -464,6 +466,11 @@ function Kaabanboard() {
                                 <h6>Task Description:</h6>
                                 <p>{eachtask.Task_description}</p>
                               </div>
+                              <Link to={`/task/${eachtask.Task_id}`}>
+                                <button className="btn btn-primary btn-block">
+                                  view
+                                </button>
+                              </Link>
                             </div>
                           </div>
                         );

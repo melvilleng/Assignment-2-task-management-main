@@ -230,11 +230,17 @@ textarea.tall-textarea {
   flex: 0 0 33.333333%;
 }
 
+.memberprofileDiv {
+  width: auto;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .controlboard {
-  width: 95%;
   overflow-y: hidden;
   overflow-x: scroll;
-  max-width: 1000px;
 }
 
 .button {
@@ -411,4 +417,8 @@ textarea.tall-textarea {
   overflow-y: scroll;
   overflow-x: hidden;
   max-height: 700px;
+}
+
+.rowwer {
+  display: flex;
 }

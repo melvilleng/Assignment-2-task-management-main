@@ -160,7 +160,7 @@ function EditApplication() {
               <label htmlFor="appdescription" className="text-muted mb-1">
                 <small>Description</small>
               </label>
-              <input
+              <textarea
                 id="app-description"
                 className="form-control"
                 type="text"
@@ -169,7 +169,7 @@ function EditApplication() {
                 onChange={(event) => {
                   setDescription(event.target.value);
                 }}
-              />
+              ></textarea>
             </div>
             <button
               onClick={edit_description}

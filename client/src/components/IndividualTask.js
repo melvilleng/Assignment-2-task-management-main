@@ -85,21 +85,7 @@ function IndividualTask() {
                 className="form-control"
                 type="text"
                 placeholder="Add Notes"
-                onChange={(event) => {
-                  setAdditionnotes(event.target.value);
-                }}
               ></textarea>
-              <button
-                onClick={() => {
-                  editaddtasknotes(
-                    singletask.Task_notes,
-                    singletask.Task_state
-                  );
-                }}
-                className="py-3 mt-2 mb-2 btn btn-lg btn-success btn-block"
-              >
-                Add Notes
-              </button>
             </div>
 
             <div className="form-group">

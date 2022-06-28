@@ -101,7 +101,7 @@ function CreateApplication() {
               <label htmlFor="appdescription" className="text-muted mb-1">
                 <small>Description</small>
               </label>
-              <input
+              <textarea
                 id="app-description"
                 className="form-control"
                 type="text"
@@ -109,7 +109,7 @@ function CreateApplication() {
                 onChange={(event) => {
                   setDescription(event.target.value);
                 }}
-              />
+              ></textarea>
             </div>
 
             <div className="form-group">

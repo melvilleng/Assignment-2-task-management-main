@@ -744,15 +744,15 @@ app.post("/createtask", function (req, res) {
   const task_createdate = req.body.create_date;
   let rnumber = req.body.rnumber;
   let timestamp =
-    "Task Created" +
-    "\n\r" +
     "Userid: " +
     task_owner +
-    "\n" +
+    "," +
     "Current State: Open" +
-    "\n" +
+    "," +
     "Datetime " +
-    datetime;
+    datetime +
+    "\n" +
+    "Task Created";
 
   db.query(
     "INSERT INTO task(Task_id,Task_name,Task_description,Task_app_Acronym,Task_creator,Task_owner,Task_createDate,Task_notes) VALUES (?,?,?,?,?,?,?,?)",
@@ -831,25 +831,27 @@ app.post("/edittask", function (req, res) {
   const newnotes = req.body.newnotes;
 
   let Plantimestamp =
-    "Plan Updated" +
-    "\n\r" +
     "Userid: " +
     task_owner +
-    " Current State: " +
+    "," +
+    "Current State: " +
     taskstate +
-    " Datetime " +
-    datetime;
+    "," +
+    "Datetime " +
+    datetime +
+    "\n" +
+    "Plan Updated";
   let Destimestamp =
-    "Description Updated" +
-    "\n\r" +
     "Userid: " +
     task_owner +
-    "\n" +
-    " Current State: " +
+    "," +
+    "Current State: " +
     taskstate +
+    "," +
+    "Datetime " +
+    datetime +
     "\n" +
-    " Datetime " +
-    datetime;
+    "Description Updated";
   //update plan
   if (task_plan) {
     db.query(
@@ -860,7 +862,8 @@ app.post("/edittask", function (req, res) {
           console.log(err);
         } else {
           if (existingplan === null || existingplan === "") {
-            let timestamp = Plantimestamp + task_notes;
+            let timestamp =
+              Plantimestamp + "\n" + "<---------->" + "\n" + task_notes;
             db.query(
               "UPDATE task SET Task_notes=? WHERE Task_id=?",
               [timestamp, taskid],
@@ -874,12 +877,14 @@ app.post("/edittask", function (req, res) {
             );
           } else {
             let newtimestamp =
+              Plantimestamp +
+              "\n" +
               "From " +
               existingplan +
               "-->" +
               task_plan +
               "\n" +
-              Plantimestamp +
+              "<---------->" +
               "\n" +
               task_notes;
             db.query(
@@ -921,12 +926,14 @@ app.post("/edittask", function (req, res) {
             );
           } else {
             let newtimestamp =
+              Destimestamp +
+              "\n" +
               "From " +
               existingdes +
               "-->" +
               task_description +
               "\n" +
-              Destimestamp +
+              "<---------->" +
               "\n" +
               task_notes;
             db.query(
@@ -953,14 +960,16 @@ app.post("/edittask", function (req, res) {
           console.log(err);
         } else {
           let new_note =
-            newnotes +
-            "\n\r" +
             "Userid: " +
             task_owner +
-            " Current State: " +
+            "," +
+            "Current State: " +
             taskstate +
+            "," +
             " Datetime " +
-            datetime;
+            datetime +
+            "\n" +
+            newnotes;
           let timestamp = new_note + "\n" + task_notes;
           db.query(
             "UPDATE task SET Task_notes=? WHERE Task_id=?",
@@ -996,20 +1005,23 @@ app.post("/promote_task", function (req, res) {
   }
   const taskid = req.body.taskid;
   let timestamp =
+    "Userid: " +
+    userid +
+    "," +
+    "Current State: " +
+    task_state +
+    "," +
+    "Datetime: " +
+    datetime +
+    "\n" +
+    "From " +
     check_task_state +
     "-->" +
     task_state +
     "\n" +
     "State Changed" +
-    "\n\r" +
-    "Userid: " +
-    userid +
     "\n" +
-    "Current State: " +
-    task_state +
-    "\n" +
-    "Datetime " +
-    datetime +
+    "<---------->" +
     "\n" +
     task_notes;
   db.query(
@@ -1037,20 +1049,23 @@ app.post("/demote_task", function (req, res) {
   }
   const taskid = req.body.taskid;
   let timestamp =
+    "Userid: " +
+    userid +
+    "," +
+    "Current State: " +
+    task_state +
+    "," +
+    "Datetime: " +
+    datetime +
+    "\n" +
+    "From " +
     check_task_state +
     "-->" +
     task_state +
     "\n" +
     "State Changed" +
-    "\n\r" +
-    "Userid: " +
-    userid +
     "\n" +
-    "Current State: " +
-    task_state +
-    "\n" +
-    "Datetime " +
-    datetime +
+    "<---------->" +
     "\n" +
     task_notes;
   db.query(
