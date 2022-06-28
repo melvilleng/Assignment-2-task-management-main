@@ -29,6 +29,10 @@ function Application() {
       });
   };
 
+  const goback = () => {
+    navigate("/");
+  };
+
   useEffect(() => {
     showallapplication();
     showoneapplication();
@@ -81,6 +85,11 @@ function Application() {
           </div>
         );
       })}
+      <div>
+        <button onClick={goback} className="button">
+          Back
+        </button>
+      </div>
     </div>
   );
 }

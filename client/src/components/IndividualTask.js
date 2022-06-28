@@ -1,14 +1,15 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { ExampleContext } from "../ExampleContext.js";
 
 function IndividualTask() {
   const [singletask, setSingletask] = useState([]);
+  const { usernamestore } = useContext(ExampleContext);
   // const [task_name, setTaskname] = useState("");
   // const [task_description, setTaskdescription] = useState("");
   // const [task_notes, setTasknotes] = useState("");
-  // const [task_plan, setTaskplan] = useState("");
-  // const [task_owner, setTaskowner] = useState("");
+  const [additionnotes, setAdditionnotes] = useState("");
   const { taskid } = useParams();
   const navigate = useNavigate();
 
@@ -17,6 +18,20 @@ function IndividualTask() {
       console.log(response.data);
       setSingletask(response.data);
     });
+  };
+
+  const editaddtasknotes = async (task_notes, gettaskstate) => {
+    await axios
+      .post("/edittask", {
+        newnotes: additionnotes,
+        taskid: taskid,
+        task_owner: usernamestore,
+        task_state: gettaskstate,
+        task_notes: task_notes,
+      })
+      .then((response) => {
+        console.log(response);
+      });
   };
 
   const goback = () => {
@@ -59,6 +74,32 @@ function IndividualTask() {
                 <small>Plan</small>
               </label>
               <h3 className="form-control">{singletask.Task_plan}</h3>
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="username-register" className="text-muted mb-1">
+                <small>Notes</small>
+              </label>
+              <textarea
+                id="email-change"
+                className="form-control"
+                type="text"
+                placeholder="Add Notes"
+                onChange={(event) => {
+                  setAdditionnotes(event.target.value);
+                }}
+              ></textarea>
+              <button
+                onClick={() => {
+                  editaddtasknotes(
+                    singletask.Task_notes,
+                    singletask.Task_state
+                  );
+                }}
+                className="py-3 mt-2 mb-2 btn btn-lg btn-success btn-block"
+              >
+                Add Notes
+              </button>
             </div>
 
             <div className="form-group">

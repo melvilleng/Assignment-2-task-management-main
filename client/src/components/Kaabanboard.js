@@ -103,6 +103,10 @@ function Kaabanboard() {
     navigate(`/create-task/${app_acronym.appname}`);
   };
 
+  const goback = () => {
+    navigate("/application");
+  };
+
   useEffect(() => {
     showallplan();
     showalltask(); // eslint-disable-next-line
@@ -115,6 +119,9 @@ function Kaabanboard() {
       <div className="leftcontainer col-3">
         <div className="col">
           <div className="card">
+            <div>
+              <button onClick={goback}>Back</button>
+            </div>
             <div className="card-header">
               <div className="card-actions float-right">
                 {checkonepermit.editplanright ? (
@@ -200,26 +207,28 @@ function Kaabanboard() {
                                 view
                               </button>
                             </Link>
-                            {checkonepermit.permit_open ||
-                            checkonepermit.placcesscontrol ? (
+                            {checkonepermit.permit_open ? (
                               <Link to={`/edittask/${eachtask.Task_id}`}>
                                 <button>Edit</button>
                               </Link>
                             ) : (
                               ""
                             )}
-
-                            <button
-                              onClick={() =>
-                                promote_task(
-                                  eachtask.Task_id,
-                                  eachtask.Task_state,
-                                  eachtask.Task_notes
-                                )
-                              }
-                            >
-                              Move Right
-                            </button>
+                            {checkonepermit.permit_open ? (
+                              <button
+                                onClick={() =>
+                                  promote_task(
+                                    eachtask.Task_id,
+                                    eachtask.Task_state,
+                                    eachtask.Task_notes
+                                  )
+                                }
+                              >
+                                Move Right
+                              </button>
+                            ) : (
+                              ""
+                            )}
                           </div>
                         </div>
                       );
@@ -248,8 +257,8 @@ function Kaabanboard() {
                             <div className="card-body p-7">
                               <h6>Task Name:</h6>
                               <p>{eachtask.Task_name}</p>
-                              <h6>Task Name:</h6>
-                              <p>{eachtask.Task_name}</p>
+                              <h6>Task Description:</h6>
+                              <p>{eachtask.Task_description}</p>
                             </div>
                           </div>
 
@@ -258,6 +267,13 @@ function Kaabanboard() {
                               view
                             </button>
                           </Link>
+                          {checkonepermit.permit_toDo ? (
+                            <Link to={`/edittask/${eachtask.Task_id}`}>
+                              <button>Edit</button>
+                            </Link>
+                          ) : (
+                            ""
+                          )}
                           {checkonepermit.permit_toDo ? (
                             <button
                               onClick={() =>
@@ -300,8 +316,8 @@ function Kaabanboard() {
                             <div className="card-body p-7">
                               <h6>Task Name:</h6>
                               <p>{eachtask.Task_name}</p>
-                              <h6>Task Name:</h6>
-                              <p>{eachtask.Task_name}</p>
+                              <h6>Task Description:</h6>
+                              <p>{eachtask.Task_description}</p>
                             </div>
                           </div>
                           {checkonepermit.permit_doing ? (
@@ -322,6 +338,9 @@ function Kaabanboard() {
                                 <button className="btn btn-primary btn-block">
                                   view
                                 </button>
+                              </Link>
+                              <Link to={`/edittask/${eachtask.Task_id}`}>
+                                <button>Edit</button>
                               </Link>
                               <button
                                 onClick={() => {
@@ -370,8 +389,8 @@ function Kaabanboard() {
                             <div className="card-body p-7">
                               <h6>Task Name:</h6>
                               <p>{eachtask.Task_name}</p>
-                              <h6>Task Name:</h6>
-                              <p>{eachtask.Task_name}</p>
+                              <h6>Task Description:</h6>
+                              <p>{eachtask.Task_description}</p>
                             </div>
                           </div>
                           {checkonepermit.permit_done ? (
@@ -392,6 +411,9 @@ function Kaabanboard() {
                                 <button className="btn btn-primary btn-block">
                                   view
                                 </button>
+                              </Link>
+                              <Link to={`/edittask/${eachtask.Task_id}`}>
+                                <button>Edit</button>
                               </Link>
                               <button
                                 onClick={() =>
@@ -438,8 +460,8 @@ function Kaabanboard() {
                             <div className="card-body p-1">
                               <h6>Task Name:</h6>
                               <p>{eachtask.Task_name}</p>
-                              <h6>Task Name:</h6>
-                              <p>{eachtask.Task_name}</p>
+                              <h6>Task Description:</h6>
+                              <p>{eachtask.Task_description}</p>
                             </div>
                           </div>
                         </div>

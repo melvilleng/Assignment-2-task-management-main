@@ -94,7 +94,7 @@ app.post("/login", (req, res) => {
     "SELECT * FROM accounts WHERE username=?",
     [username],
     async (err, results) => {
-      if (results[0].status === "Disable") {
+      if ((await results[0].status) === "Disable") {
         res.send({ message: "Disable" });
       } else {
         if (err) {
@@ -961,7 +961,7 @@ app.post("/edittask", function (req, res) {
             taskstate +
             " Datetime " +
             datetime;
-          let timestamp = new_note + "/n" + task_notes;
+          let timestamp = new_note + "\n" + task_notes;
           db.query(
             "UPDATE task SET Task_notes=? WHERE Task_id=?",
             [timestamp, taskid],

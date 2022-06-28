@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import moment from "moment";
 
 function EditApplication() {
@@ -13,7 +13,7 @@ function EditApplication() {
   const [startdate, setStartdate] = useState(date);
   const [enddate, setEnddate] = useState(date);
   const { appname } = useParams();
-  const [usergroup,setshowUsergroup]=useState([])
+  const [usergroup, setshowUsergroup] = useState([]);
   const [permit_open, setpermit_open] = useState("");
   const [permit_create, setpermit_create] = useState("");
   const [permit_todolist, setpermit_todolist] = useState("");
@@ -104,7 +104,7 @@ function EditApplication() {
     axios
       .post("/edit_permit", {
         appname: appname,
-        app_todo:permit_todolist,
+        app_todo: permit_todolist,
       })
       .then(() => {
         console.log("success");
@@ -116,7 +116,7 @@ function EditApplication() {
     axios
       .post("/edit_permit", {
         appname: appname,
-        app_doing:permit_Doing,
+        app_doing: permit_Doing,
       })
       .then(() => {
         console.log("success");
@@ -128,7 +128,7 @@ function EditApplication() {
     axios
       .post("/edit_permit", {
         appname: appname,
-        app_done:permit_Done
+        app_done: permit_Done,
       })
       .then(() => {
         console.log("success");
@@ -136,9 +136,9 @@ function EditApplication() {
       });
   };
 
-  const backtoapplication =()=>{
-    navigate("/application")
-  }
+  const backtoapplication = () => {
+    navigate("/application");
+  };
 
   useEffect(() => {
     showallapplication(); // eslint-disable-next-line
@@ -186,9 +186,8 @@ function EditApplication() {
                 <small>End Date</small>
               </label>
               <p>{moment(showapp.App_endDate).format("DD-MM-YYYY")}</p>
-             </div>
+            </div>
 
-            
             <div className="form-group">
               <label htmlFor="startdate" className="text-muted mb-1">
                 <small>Edit Start Date</small>
@@ -232,117 +231,127 @@ function EditApplication() {
               Edit End Date
             </button>
             <div>
-            <div>
+              <div>
                 <label>
-                <h6>Permit Create:</h6>
-              </label>
-            <select
-                      onChange={(event) => {
-                        setpermit_create(event.target.value);
-                      }}
-                    >
-                      <option value={showapp.App_permit_Create} selected>
-                      {showapp.App_permit_Create}
+                  <h6>Permit Create:</h6>
+                </label>
+                <select
+                  onChange={(event) => {
+                    setpermit_create(event.target.value);
+                  }}
+                >
+                  <option value={showapp.App_permit_Create} selected>
+                    {showapp.App_permit_Create}
+                  </option>
+                  {usergroup.map((usergroupinfo, usergroup) => {
+                    return (
+                      <option key={usergroup}>
+                        {usergroupinfo.usergroup_name}
                       </option>
-                      {usergroup.map((usergroupinfo, usergroup) => {
-                        return (
-                          <option key={usergroup}>
-                            {usergroupinfo.usergroup_name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    <button onClick={editpermit_create} className="permitbtn ml-2">Edit</button>
-                    </div>
-                    <div>
-                    <label>
-                <h6>Permit Open:</h6>
-              </label>
-            <select
-                      onChange={(event) => {
-                        setpermit_open(event.target.value);
-                      }}
-                    >
-                      <option value={showapp.App_permit_Open} selected>
-                      {showapp.App_permit_Open}
+                    );
+                  })}
+                </select>
+                <button onClick={editpermit_create} className="permitbtn ml-2">
+                  Edit
+                </button>
+              </div>
+              <div>
+                <label>
+                  <h6>Permit Open:</h6>
+                </label>
+                <select
+                  onChange={(event) => {
+                    setpermit_open(event.target.value);
+                  }}
+                >
+                  <option value={showapp.App_permit_Open} selected>
+                    {showapp.App_permit_Open}
+                  </option>
+                  {usergroup.map((usergroupinfo, usergroup) => {
+                    return (
+                      <option key={usergroup}>
+                        {usergroupinfo.usergroup_name}
                       </option>
-                      {usergroup.map((usergroupinfo, usergroup) => {
-                        return (
-                          <option key={usergroup}>
-                            {usergroupinfo.usergroup_name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    <button onClick={editpermit_open} className="permitbtn ml-2">Edit</button>
-                    </div>
-                    <div>
-                    <label>
-                <h6>Permit to-do-list:</h6>
-              </label>
-            <select
-                      onChange={(event) => {
-                        setpermit_todolist(event.target.value);
-                      }}
-                    >
-                      <option value=" ">
-                        Select your option
+                    );
+                  })}
+                </select>
+                <button onClick={editpermit_open} className="permitbtn ml-2">
+                  Edit
+                </button>
+              </div>
+              <div>
+                <label>
+                  <h6>Permit to-do-list:</h6>
+                </label>
+                <select
+                  onChange={(event) => {
+                    setpermit_todolist(event.target.value);
+                  }}
+                >
+                  <option value={showapp.App_permit_toDoList}>
+                    {showapp.App_permit_toDoList}
+                  </option>
+                  {usergroup.map((usergroupinfo, usergroup) => {
+                    return (
+                      <option key={usergroup}>
+                        {usergroupinfo.usergroup_name}
                       </option>
-                      {usergroup.map((usergroupinfo, usergroup) => {
-                        return (
-                          <option key={usergroup}>
-                            {usergroupinfo.usergroup_name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    <button onClick={editpermit_todo} className="permitbtn ml-2">Edit</button>
-                    </div>
-                    <div>
-                    <label>
-                <h6>Permit Doing:</h6>
-              </label>
-            <select
-                      onChange={(event) => {
-                        setpermitDoing(event.target.value);
-                      }}
-                    >
-                      <option value=" ">
-                        Select your option
+                    );
+                  })}
+                </select>
+                <button onClick={editpermit_todo} className="permitbtn ml-2">
+                  Edit
+                </button>
+              </div>
+              <div>
+                <label>
+                  <h6>Permit Doing:</h6>
+                </label>
+                <select
+                  onChange={(event) => {
+                    setpermitDoing(event.target.value);
+                  }}
+                >
+                  <option value={showapp.App_permit_Doing}>
+                    {showapp.App_permit_Doing}
+                  </option>
+                  {usergroup.map((usergroupinfo, usergroup) => {
+                    return (
+                      <option key={usergroup}>
+                        {usergroupinfo.usergroup_name}
                       </option>
-                      {usergroup.map((usergroupinfo, usergroup) => {
-                        return (
-                          <option key={usergroup}>
-                            {usergroupinfo.usergroup_name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    <button onClick={editpermit_doing} className="permitbtn ml-2">Edit</button>
-                    </div>
-                    <div>
-                    <label>
-                <h6>Permit Done:</h6>
-              </label>
-            <select
-                      onChange={(event) => {
-                        setpermitDone(event.target.value);
-                      }}
-                    >
-                      <option value={" "}>
-                        Select your option
+                    );
+                  })}
+                </select>
+                <button onClick={editpermit_doing} className="permitbtn ml-2">
+                  Edit
+                </button>
+              </div>
+              <div>
+                <label>
+                  <h6>Permit Done:</h6>
+                </label>
+                <select
+                  onChange={(event) => {
+                    setpermitDone(event.target.value);
+                  }}
+                >
+                  <option value={showapp.App_permit_Done}>
+                    {showapp.App_permit_Done}
+                  </option>
+                  {usergroup.map((usergroupinfo, usergroup) => {
+                    return (
+                      <option key={usergroup}>
+                        {usergroupinfo.usergroup_name}
                       </option>
-                      {usergroup.map((usergroupinfo, usergroup) => {
-                        return (
-                          <option key={usergroup}>
-                            {usergroupinfo.usergroup_name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                    <button onClick={editpermit_done} className="permitbtn ml-2">Edit</button>
-                    </div>
-                    </div>
+                    );
+                  })}
+                </select>
+                <button onClick={editpermit_done} className="permitbtn ml-2">
+                  Edit
+                </button>
+              </div>
+            </div>
           </form>
         </div>
       </div>

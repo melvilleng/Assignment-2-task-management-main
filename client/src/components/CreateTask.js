@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { ExampleContext } from "../ExampleContext.js";
 
 function CreateTask() {
@@ -42,12 +42,12 @@ function CreateTask() {
       });
   };
 
-  const backtokaaban=()=>{
-    navigate(`/application/${plan_app_Acronym.appname}`)
-  }
+  const backtokaaban = () => {
+    navigate(`/application/${plan_app_Acronym.appname}`);
+  };
 
   useEffect(() => {
-    getrnumber();// eslint-disable-next-line
+    getrnumber(); // eslint-disable-next-line
   }, []);
   return (
     <div>
@@ -69,21 +69,6 @@ function CreateTask() {
               />
             </div>
 
-            <div className="form-group">
-              <label htmlFor="startdate" className="text-muted mb-1">
-                <small>Task Date Created</small>
-              </label>
-              <input
-                id="start-date"
-                className="form-control"
-                type="date"
-                placeholder="Start Date"
-                defaultValue={date}
-                onChange={(event) => {
-                  setCreatetaskdate(event.target.value);
-                }}
-              />
-            </div>
             <h4>Optional</h4>
             <div className="form-group">
               <label htmlFor="description" className="text-muted mb-1">
