@@ -31,24 +31,25 @@ function LogOut() {
         lowerCase === true &&
         specialChar === true &&
         max_Length === true
-      ){
-      const response = await Axios.post("/login", {
-        username: usernamestore,
-        password: password,
-      });
-      if (response.data.message) {
-        alert(response.data.message);
-      } else {
-        localStorage.setItem("username", response.data[0].username);
-        setLoggedIn(true);
-        await Axios.post("/checkgroup", {
+      ) {
+        const response = await Axios.post("/login", {
           username: usernamestore,
-        }).then((test) => {
-          console.log(test.data.isAdmin);
-          localStorage.setItem("usergroup", test.data.isAdmin);
+          password: password,
         });
-      }}else{
-        alert("Please fill in the correct Username/Password")
+        if (response.data.message) {
+          alert(response.data.message);
+        } else {
+          localStorage.setItem("username", response.data[0].username);
+          setLoggedIn(true);
+          await Axios.post("/checkgroup", {
+            username: usernamestore,
+          }).then((test) => {
+            console.log(test.data.isAdmin);
+            localStorage.setItem("usergroup", test.data.isAdmin);
+          });
+        }
+      } else {
+        alert("Please fill in the correct Username/Password");
       }
     } catch (event) {
       console.log("There was a problem.");
@@ -88,7 +89,7 @@ function LogOut() {
                 setPassword(event.target.value);
               }}
             />
-            <div>
+            {/* <div>
             <ul>
                 <li>
                   Valid Length:{" "}
@@ -115,7 +116,7 @@ function LogOut() {
                   {max_Length ? <span>True</span> : <span>False</span>}
                 </li>
               </ul>
-            </div>
+            </div> */}
           </div>
 
           <button

@@ -94,28 +94,32 @@ app.post("/login", (req, res) => {
     "SELECT * FROM accounts WHERE username=?",
     [username],
     async (err, results) => {
-      if ((await results[0].status) === "Disable") {
-        res.send({ message: "Disable" });
-      } else {
-        if (err) {
-          console.log(err);
-        }
-        if (results.length > 0) {
-          await bcrypt.compare(
-            password,
-            results[0].password,
-            (err, response) => {
-              if (response) {
-                req.session.user = results;
-                res.send(results);
-              } else {
-                res.send({ message: "Wrong username/password" });
-              }
-            }
-          );
+      try {
+        if ((await results[0].status) === "Disable") {
+          res.send({ message: "Disable" });
         } else {
-          res.send({ message: "User does not exist" });
+          if (err) {
+            console.log(err);
+          }
+          if (results.length > 0) {
+            await bcrypt.compare(
+              password,
+              results[0].password,
+              (err, response) => {
+                if (response) {
+                  req.session.user = results;
+                  res.send(results);
+                } else {
+                  res.send({ message: "Wrong username/password" });
+                }
+              }
+            );
+          } else {
+            res.send({ message: "User does not exist" });
+          }
         }
+      } catch {
+        res.send({ message: "Wrong username/password" });
       }
     }
   );
